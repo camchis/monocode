@@ -493,6 +493,22 @@ function followSystemWindowTheme() {
     });
 }
 
+/**
+ * Matches a panel's native blur, which follows the window's appearance rather
+ * than the page's, to an explicit theme. "system" is never pinned: the theme
+ * is app-wide on macOS, so pinning the resolved scheme would hold every window
+ * at the OS appearance of this moment.
+ */
+export function pinPanelWindowTheme(
+  preference: ThemePreference,
+  scheme: ColorScheme,
+) {
+  if (preference === "system") return;
+  void getCurrentWindow()
+    .setTheme(scheme)
+    .catch(() => undefined);
+}
+
 export function applyThemePreference(value: ThemePreference): ColorScheme {
   if (value === "system") followSystemWindowTheme();
   const next = resolveColorScheme(value);

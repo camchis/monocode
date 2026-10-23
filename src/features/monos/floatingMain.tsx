@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import {
   applyAccentColor,
   activateWindowAppearance,
@@ -18,6 +17,7 @@ import {
   loadThemeHue,
   loadThemePreference,
   loadThemeSaturation,
+  pinPanelWindowTheme,
   watchSystemColorScheme,
 } from "../settings/model/appearance";
 import { FloatingMonoChat } from "./ui/FloatingMonoChat";
@@ -50,12 +50,7 @@ function applyFloatingAppearance() {
   const preference = loadThemePreference();
   const scheme = applyThemePreference(preference);
   activateWindowAppearance();
-  // The theme is app-wide on macOS, so "system" is left cleared: pinning the
-  // resolved scheme would hold every window at the OS appearance of this moment.
-  if (preference === "system") return;
-  void getCurrentWindow()
-    .setTheme(scheme)
-    .catch(() => undefined);
+  pinPanelWindowTheme(preference, scheme);
 }
 
 applyFloatingAppearance();

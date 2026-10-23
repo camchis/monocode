@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { applyThemePreference } from "./appearance";
+import { applyThemePreference, pinPanelWindowTheme } from "./appearance";
 
 const platform = vi.hoisted(() => ({ isMac: true }));
 vi.mock("../../../platform/tauri/platform", async (importOriginal) => ({
@@ -40,6 +40,20 @@ describe("window theme", () => {
   it("does not touch the window theme outside macOS", () => {
     platform.isMac = false;
     applyThemePreference("system");
+    expect(setTheme).not.toHaveBeenCalled();
+  });
+});
+
+describe("panel window theme", () => {
+  it("pins an explicit theme so the panel's blur matches it", () => {
+    pinPanelWindowTheme("dark", "dark");
+    pinPanelWindowTheme("light", "light");
+    expect(setTheme.mock.calls).toEqual([["dark"], ["light"]]);
+  });
+
+  it("never pins the scheme resolved from the system", () => {
+    pinPanelWindowTheme("system", "light");
+    pinPanelWindowTheme("system", "dark");
     expect(setTheme).not.toHaveBeenCalled();
   });
 });
