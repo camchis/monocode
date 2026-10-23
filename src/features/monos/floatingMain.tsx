@@ -47,8 +47,12 @@ function applyFloatingAppearance() {
   applySidebarOpacity(loadSidebarOpacity());
   applySidebarBlur(loadSidebarBlur());
   applyBodyGlass(loadBodyGlass());
-  const scheme = applyThemePreference(loadThemePreference());
+  const preference = loadThemePreference();
+  const scheme = applyThemePreference(preference);
   activateWindowAppearance();
+  // The theme is app-wide on macOS, so "system" is left cleared: pinning the
+  // resolved scheme would hold every window at the OS appearance of this moment.
+  if (preference === "system") return;
   void getCurrentWindow()
     .setTheme(scheme)
     .catch(() => undefined);
