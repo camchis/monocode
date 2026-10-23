@@ -13,6 +13,7 @@ import {
   loadThemePreference,
   loadThemeSaturation,
   pinPanelWindowTheme,
+  watchSystemColorScheme,
 } from "../settings/model/appearance";
 import { QuickGitPopup } from "./ui/QuickGitPopup";
 import { QuickComposer } from "./ui/QuickComposer";
@@ -33,6 +34,7 @@ function applyAppearance() {
 }
 
 applyAppearance();
+watchSystemColorScheme();
 installNativeContextMenuGuard();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
